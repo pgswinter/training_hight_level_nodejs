@@ -4,7 +4,7 @@ var url = "mongodb://localhost:27017/portfolioDb";
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   var personalityTable = [
-    { idPerson: 1,
+    { id: 1,
       idSkill: [1,2,3,4,5,6,7,8,9,10],
       idFavourite: [1,2,3],
       career: 'Front end Developer',
@@ -17,68 +17,82 @@ MongoClient.connect(url, function(err, db) {
       phone: '10693547727',
       mail: 'tuananh.nguyen.freelance@gmail.com',
       education: 'Duy Tan University'
+    },
+    { id: 2,
+      idSkill: [5],
+      idFavourite: [2],
+      career: 'Artist',
+      name: 'Kien Quoc VO',
+      description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, placeat, nostrum? Libero quod animi incidunt laborum exercitationem! Consectetur aperiam voluptate quo eius, sed accusamus soluta reiciendis animi veniam rem ipsum!`,
+      relationship: 'single',
+      national: 'vietnam',
+      language: 'vietnamese/english',
+      address: 'Hai Chau, Da Nang',
+      phone: '123456789',
+      mail: 'quocvo.designer@gmail.com',
+      education: 'Duy Tan University'
     }
   ];
   var skillTable = [
       { 
-        idSkill: 1,
+        id: 1,
         idSector: [1],
         skill: 'React/Readux',
       },
       { 
-        idSkill: 2,
+        id: 2,
         idSector: [1],
         skill: 'Webpack'
       },
       { 
-        idSkill: 3,
+        id: 3,
         idSector: [1],
         skill: 'Javascript/Jquery/ES6'
       },
       { 
-        idSkill: 4,
+        id: 4,
         idSector: [1],
         skill: 'SASS/Bootstrap'
       },
       { 
-        idSkill: 5,
+        id: 5,
         idSector: [1],
         skill: 'Photoshop/Illustrator'
       },
       { 
-        idSkill: 6,
+        id: 6,
         idSector: [1],
         skill: 'ExpressJS'
       },
       { 
-        idSkill: 7, 
+        id: 7, 
         skill: 'GIT'
       },
       { 
-        idSkill: 8,
+        id: 8,
         idSector: [1],
         skill: 'MongoDB/Moongose'
       },
       { 
-        idSkill: 9,
+        id: 9,
         idSector: [1],
         skill: 'GULP'
       },
       { 
-        idSkill: 10,
+        id: 10,
         idSector: [1], 
         skill: 'HTML/pug/ejs'
       }
   ];
   var sectorlTable = [
     { 
-      idSector: 1, 
+      id: 1, 
       sector: 'IT/Software'
     }
   ];
   var experienceTable = [
     { 
-      idExp: 1,
+      id: 1,
       idSector: [1],
       nameConpany: 'Amaris',
       position: 'Senior Front end Developer',
@@ -88,15 +102,15 @@ MongoClient.connect(url, function(err, db) {
   ];
   var favouriteTable = [
     {
-      idFavourite: 1,
+      id: 1,
       name: 'Travelling'
     },
     {
-      idFavourite: 2,
+      id: 2,
       name: 'Music'
     },
     {
-      idFavourite: 3,
+      id: 3,
       name: 'Blog'
     },
   ]

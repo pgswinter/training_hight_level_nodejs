@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const fetchPerson = idPerson => {
-	return axios.get(`/api/portfolio/${idPerson}`)
+export const fetchPortfolio = idPerson => {
+	return axios.get(`/api/portfolios/${idPerson}`)
 				.then(resp => resp.data);
 }
