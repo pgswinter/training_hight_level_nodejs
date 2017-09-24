@@ -1,10 +1,12 @@
 import React from 'react';
 import PortfolioPreview from './PortfolioPreview';
 
-const PortfolioList = ({portfolios}) => (
+const PortfolioList = ({portfolios, onPortfolioClick}) => (
 		<div className="PortfolioList">
 			{Object.keys(portfolios).map(idPerson =>
-				<PortfolioPreview key={idPerson} {...portfolios[idPerson]} />
+				<PortfolioPreview key={idPerson} 
+					onClick={onPortfolioClick}
+					{...portfolios[idPerson]} />
 			)}
 		</div>
 	)

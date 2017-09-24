@@ -11,7 +11,7 @@ server.set('view engine', 'ejs');
 
 import serverRender from './serverRender';
 
-server.get(['/','/portfolio/:portfolioId'], (req,res) => {
+server.get(['/','/portfolio/:idPerson'], (req,res) => {
   serverRender(req.params.idPerson)
     .then(({initialMarkup, initialData}) => {
       res.render('index',{
@@ -19,26 +19,11 @@ server.get(['/','/portfolio/:portfolioId'], (req,res) => {
         initialData
       });
     })
-    .catch(console.error);
+    .catch(error => {
+    	console.log(error);
+    	res.status(404).send('Bad request');
+    });
 })
-
-// **** Server side routing for a contest 
-// server.get(['/','/portfolio/:portfolioId'], (req,res) => { // add array to routing link, easy wtf
-// 	// Get variable on URL: req.params.contestId, like as $_GET('<variable>') of PHP
-// 	// console.log(req.params.contestId);
-// 	serverRender(req.params.idPerson)
-// 	    .then(({initialMarkup, initialData}) => {
-// 	      res.render('index',{
-// 	        initialMarkup,
-// 	        initialData
-// 	      });
-// 	    })
-// 	    .catch(error => {
-// 	    	console.log(error);
-// 	    	res.status(404).send('Bad request');
-// 	    });
-// })
-// **** Server side routing for a contest
 
 server.use('/api',apiRouter);
 server.use(express.static("views")) // Set current patch inside the folder

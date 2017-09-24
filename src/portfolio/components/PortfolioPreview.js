@@ -14,9 +14,14 @@ import React, {Component} from 'react';
 // 	)
 
 class PortfolioPreview extends Component{
+	handleClick = () => {
+		this.props.onClick(this.props.id)
+	};
 	render(){
 		return (
-			<div className="PortfolioPreview">
+			<div className="PortfolioPreview"
+				onClick={this.handleClick}
+			>
 				<div className="portfolio-name" >
 					{this.props.name}
 				</div>

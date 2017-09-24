@@ -22990,13 +22990,25 @@ var App = function (_Component) {
 
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props, context));
 
-		_this.fetchPerson = function (idPerson) {
-			pushState({ currentIdPerson: idPerson }, '/portfolios/' + idPerson);
+		_this.fetchPortfolio = function (idPerson) {
+			pushState({ currentIdPerson: idPerson }, '/portfolio/' + idPerson);
 			// **** fetch Data from api
 			api.fetchPortfolio(idPerson).then(function (portfolio) {
 				_this.setState({
 					currentIdPerson: portfolio.id,
 					portfolios: _extends({}, _this.state.portfolios, _defineProperty({}, portfolio.id, portfolio))
+				});
+			});
+			// **** end fetch Data from api
+		};
+
+		_this.fetchPortfolioList = function (idPerson) {
+			pushState({ currentIdPerson: null }, '/');
+			// **** fetch Data from api
+			api.fetchPortfolioList().then(function (portfolios) {
+				_this.setState({
+					currentIdPerson: null,
+					portfolios: portfolios
 				});
 			});
 			// **** end fetch Data from api
@@ -23008,10 +23020,20 @@ var App = function (_Component) {
 
 	_createClass(App, [{
 		key: 'componentDidMount',
-		value: function componentDidMount() {}
+		value: function componentDidMount() {
+			var _this2 = this;
+
+			onPopState(function (event) {
+				_this2.setState({
+					currentIdPerson: (event.state || {}).currentIdPerson
+				});
+			});
+		}
 	}, {
 		key: 'componentWillUnmount',
-		value: function componentWillUnmount() {}
+		value: function componentWillUnmount() {
+			onPopState(null);
+		}
 	}, {
 		key: 'currentPortfolio',
 
@@ -23031,9 +23053,13 @@ var App = function (_Component) {
 		key: 'currentContent',
 		value: function currentContent() {
 			if (this.state.currentIdPerson) {
-				return _react2.default.createElement(_Portfolio2.default, this.currentPortfolio());
+				return _react2.default.createElement(_Portfolio2.default, _extends({
+					portfolioListClick: this.fetchPortfolioList
+				}, this.currentPortfolio()));
 			}
-			return _react2.default.createElement(_PortfolioList2.default, { portfolios: this.state.portfolios });
+			return _react2.default.createElement(_PortfolioList2.default, {
+				onPortfolioClick: this.fetchPortfolio,
+				portfolios: this.state.portfolios });
 		}
 	}, {
 		key: 'render',
@@ -23089,12 +23115,15 @@ var _PortfolioPreview2 = _interopRequireDefault(_PortfolioPreview);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PortfolioList = function PortfolioList(_ref) {
-	var portfolios = _ref.portfolios;
+	var portfolios = _ref.portfolios,
+	    onPortfolioClick = _ref.onPortfolioClick;
 	return _react2.default.createElement(
 		'div',
 		{ className: 'PortfolioList' },
 		Object.keys(portfolios).map(function (idPerson) {
-			return _react2.default.createElement(_PortfolioPreview2.default, _extends({ key: idPerson }, portfolios[idPerson]));
+			return _react2.default.createElement(_PortfolioPreview2.default, _extends({ key: idPerson,
+				onClick: onPortfolioClick
+			}, portfolios[idPerson]));
 		})
 	);
 };
@@ -23151,9 +23180,19 @@ var PortfolioPreview = function (_Component) {
 	_inherits(PortfolioPreview, _Component);
 
 	function PortfolioPreview() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
 		_classCallCheck(this, PortfolioPreview);
 
-		return _possibleConstructorReturn(this, (PortfolioPreview.__proto__ || Object.getPrototypeOf(PortfolioPreview)).apply(this, arguments));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PortfolioPreview.__proto__ || Object.getPrototypeOf(PortfolioPreview)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function () {
+			_this.props.onClick(_this.props.id);
+		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	_createClass(PortfolioPreview, [{
@@ -23161,7 +23200,9 @@ var PortfolioPreview = function (_Component) {
 		value: function render() {
 			return _react2.default.createElement(
 				"div",
-				{ className: "PortfolioPreview" },
+				{ className: "PortfolioPreview",
+					onClick: this.handleClick
+				},
 				_react2.default.createElement(
 					"div",
 					{ className: "portfolio-name" },
@@ -23221,7 +23262,47 @@ var Portfolio = function (_Component) {
 			return _react2.default.createElement(
 				"div",
 				{ className: "portfolio" },
-				this.props.name
+				_react2.default.createElement(
+					"div",
+					{ className: "portfolio-name" },
+					this.props.name
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "portfolio-career" },
+					this.props.career
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "portfolio-description" },
+					this.props.description
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "portfolio-national" },
+					this.props.national
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "portfolio-address" },
+					this.props.address
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "portfolio-phone" },
+					this.props.phone
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "portfolio-mail" },
+					this.props.mail
+				),
+				_react2.default.createElement(
+					"div",
+					{ className: "link",
+						onClick: this.props.portfolioListClick },
+					"Back to Home Page"
+				)
 			);
 		}
 	}]);
@@ -23241,13 +23322,19 @@ exports.default = Portfolio;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.fetchPortfolio = undefined;
+exports.fetchPortfolio = exports.fetchPortfolioList = undefined;
 
 var _axios = __webpack_require__(196);
 
 var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var fetchPortfolioList = exports.fetchPortfolioList = function fetchPortfolioList() {
+	return _axios2.default.get('/api/portfolios').then(function (resp) {
+		return resp.data.portfolios;
+	});
+};
 
 var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(idPerson) {
 	return _axios2.default.get('/api/portfolios/' + idPerson).then(function (resp) {

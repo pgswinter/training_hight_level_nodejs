@@ -18,17 +18,21 @@ class App extends Component{
 	};
 
 	componentDidMount(){
-		
+		onPopState((event)=>{
+			this.setState({
+				currentIdPerson: (event.state || {}).currentIdPerson
+			});
+		})
 	}
 
 	componentWillUnmount(){
-		
+		onPopState(null);
 	}
 
-	fetchPerson = (idPerson) => {
+	fetchPortfolio = (idPerson) => {
 		pushState(
 			{currentIdPerson: idPerson},
-			`/portfolios/${idPerson}`
+			`/portfolio/${idPerson}`
 		);
 		// **** fetch Data from api
 		api.fetchPortfolio(idPerson).then(portfolio => {
@@ -38,6 +42,21 @@ class App extends Component{
 					...this.state.portfolios,
 					[portfolio.id]: portfolio
 				}
+			});
+		});
+		// **** end fetch Data from api
+	};
+
+	fetchPortfolioList = (idPerson) => {
+		pushState(
+			{currentIdPerson: null},
+			`/`
+		);
+		// **** fetch Data from api
+		api.fetchPortfolioList().then(portfolios => {
+			this.setState({
+				currentIdPerson: null,
+				portfolios
 			});
 		});
 		// **** end fetch Data from api
@@ -57,9 +76,13 @@ class App extends Component{
 
 	currentContent(){
 		if(this.state.currentIdPerson){
-			return <Portfolio {...this.currentPortfolio()} />
+			return <Portfolio 
+					portfolioListClick={this.fetchPortfolioList}
+					{...this.currentPortfolio()} />
 		}
-		return <PortfolioList portfolios={this.state.portfolios}/>
+		return <PortfolioList 
+					onPortfolioClick={this.fetchPortfolio}
+					portfolios={this.state.portfolios}/>
 	}
 
 	render(){
