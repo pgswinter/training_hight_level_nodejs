@@ -15,7 +15,7 @@ import React, {Component} from 'react';
 
 class PortfolioPreview extends Component{
 	handleClick = () => {
-		this.props.onClick(this.props.id)
+		this.props.onClick(this.props._id)
 	};
 	render(){
 		return (

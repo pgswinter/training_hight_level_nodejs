@@ -37,10 +37,10 @@ class App extends Component{
 		// **** fetch Data from api
 		api.fetchPortfolio(idPerson).then(portfolio => {
 			this.setState({
-				currentIdPerson: portfolio.id,
+				currentIdPerson: portfolio._id,
 				portfolios:{
 					...this.state.portfolios,
-					[portfolio.id]: portfolio
+					[portfolio._id]: portfolio
 				}
 			});
 		});
@@ -62,22 +62,53 @@ class App extends Component{
 		// **** end fetch Data from api
 	};
 
-	// fetchSkills = (idSkills) => {
-	// 	api.fetchSkills(idSkills).then(skills => {
-	// 		this.setState({
-	// 			skills
-	// 		})
-	// 	})
-	// }
-
 	currentPortfolio(){
 		return this.state.portfolios[this.state.currentIdPerson];
+	}
+
+	fetchSkills = (idSkills) => {
+		if(idSkills.length === 0){
+			return;
+		}
+		api.fetchSkills(idSkills).then(skills => {
+			this.setState({
+				skills
+			});
+		});
+	}
+
+	lookupSkill = (idSkill) =>{
+		if(!this.state.skills || !this.state.skills[idSkill]){
+			return {
+				skill: '...'
+			};
+		}
+		return this.state.skills[idSkill];
+	}
+
+	addSkill = (newSkill, idPerson) => {
+		api.addSkill(newSkill, idPerson).then(resp=>
+			this.setState({
+				portfolios:{
+					...this.state.portfolios,
+					[resp.updatePorfolio._id]: resp.updatePorfolio
+				},
+				skills:{
+					...this.state.skills,
+					[resp.newSkill._id]: resp.newSkill
+				}
+			})
+		)
+		.catch(console.error);
 	}
 
 	currentContent(){
 		if(this.state.currentIdPerson){
 			return <Portfolio 
 					portfolioListClick={this.fetchPortfolioList}
+					fetchSkills={this.fetchSkills}
+					lookupSkill={this.lookupSkill}
+					addSkill={this.addSkill}
 					{...this.currentPortfolio()} />
 		}
 		return <PortfolioList 

@@ -8,7 +8,8 @@
     "build:dev": "webpack --env=dev --progress --profile --colors --watch",
     "build:dist": "webpack --env=prod --progress --profile --colors",
     "insertdata": "node ./database/myDataMongo.js",
-    "updatedata": "node ./database/myUpdateMongo.js"
+    "updatedata": "node ./database/myUpdateMongo.js",
+    "deletedata": "node ./database/myDeleteCollection.js"
   },
   "author": "Anh(Robert)T. NGUYEN",
   "license": "MIT",

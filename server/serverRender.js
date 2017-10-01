@@ -19,9 +19,9 @@ const getApiUrl = idPerson => {
 const getInitialData = (idPerson, apiData) => {
 	if(idPerson){
 		return {
-			currentIdPerson: apiData.id,
+			currentIdPerson: apiData._id,
 			portfolios:{
-				[apiData.id]: apiData
+				[apiData._id]: apiData
 			}
 		}
 	}

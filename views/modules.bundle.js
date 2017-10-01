@@ -22995,8 +22995,8 @@ var App = function (_Component) {
 			// **** fetch Data from api
 			api.fetchPortfolio(idPerson).then(function (portfolio) {
 				_this.setState({
-					currentIdPerson: portfolio.id,
-					portfolios: _extends({}, _this.state.portfolios, _defineProperty({}, portfolio.id, portfolio))
+					currentIdPerson: portfolio._id,
+					portfolios: _extends({}, _this.state.portfolios, _defineProperty({}, portfolio._id, portfolio))
 				});
 			});
 			// **** end fetch Data from api
@@ -23012,6 +23012,35 @@ var App = function (_Component) {
 				});
 			});
 			// **** end fetch Data from api
+		};
+
+		_this.fetchSkills = function (idSkills) {
+			if (idSkills.length === 0) {
+				return;
+			}
+			api.fetchSkills(idSkills).then(function (skills) {
+				_this.setState({
+					skills: skills
+				});
+			});
+		};
+
+		_this.lookupSkill = function (idSkill) {
+			if (!_this.state.skills || !_this.state.skills[idSkill]) {
+				return {
+					skill: '...'
+				};
+			}
+			return _this.state.skills[idSkill];
+		};
+
+		_this.addSkill = function (newSkill, idPerson) {
+			api.addSkill(newSkill, idPerson).then(function (resp) {
+				return _this.setState({
+					portfolios: _extends({}, _this.state.portfolios, _defineProperty({}, resp.updatePorfolio._id, resp.updatePorfolio)),
+					skills: _extends({}, _this.state.skills, _defineProperty({}, resp.newSkill._id, resp.newSkill))
+				});
+			}).catch(console.error);
 		};
 
 		_this.state = _this.props.initialData;
@@ -23036,16 +23065,6 @@ var App = function (_Component) {
 		}
 	}, {
 		key: 'currentPortfolio',
-
-
-		// fetchSkills = (idSkills) => {
-		// 	api.fetchSkills(idSkills).then(skills => {
-		// 		this.setState({
-		// 			skills
-		// 		})
-		// 	})
-		// }
-
 		value: function currentPortfolio() {
 			return this.state.portfolios[this.state.currentIdPerson];
 		}
@@ -23054,7 +23073,10 @@ var App = function (_Component) {
 		value: function currentContent() {
 			if (this.state.currentIdPerson) {
 				return _react2.default.createElement(_Portfolio2.default, _extends({
-					portfolioListClick: this.fetchPortfolioList
+					portfolioListClick: this.fetchPortfolioList,
+					fetchSkills: this.fetchSkills,
+					lookupSkill: this.lookupSkill,
+					addSkill: this.addSkill
 				}, this.currentPortfolio()));
 			}
 			return _react2.default.createElement(_PortfolioList2.default, {
@@ -23191,7 +23213,7 @@ var PortfolioPreview = function (_Component) {
 		}
 
 		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = PortfolioPreview.__proto__ || Object.getPrototypeOf(PortfolioPreview)).call.apply(_ref, [this].concat(args))), _this), _this.handleClick = function () {
-			_this.props.onClick(_this.props.id);
+			_this.props.onClick(_this.props._id);
 		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
@@ -23251,57 +23273,111 @@ var Portfolio = function (_Component) {
 	_inherits(Portfolio, _Component);
 
 	function Portfolio() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
 		_classCallCheck(this, Portfolio);
 
-		return _possibleConstructorReturn(this, (Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).apply(this, arguments));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Portfolio.__proto__ || Object.getPrototypeOf(Portfolio)).call.apply(_ref, [this].concat(args))), _this), _this.handleSubmit = function (e) {
+			e.preventDefault();
+			_this.props.addSkill(_this.refs.newSkillInput.value, _this.props._id);
+			_this.refs.newSkillInput.value = '';
+		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	_createClass(Portfolio, [{
-		key: "render",
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this.props.fetchSkills(this.props.idSkill);
+		}
+	}, {
+		key: 'render',
 		value: function render() {
+			var _this2 = this;
+
 			return _react2.default.createElement(
-				"div",
-				{ className: "portfolio" },
+				'div',
+				{ className: 'portfolio' },
 				_react2.default.createElement(
-					"div",
-					{ className: "portfolio-name" },
+					'div',
+					{ className: 'portfolio-name' },
 					this.props.name
 				),
 				_react2.default.createElement(
-					"div",
-					{ className: "portfolio-career" },
+					'div',
+					{ className: 'portfolio-career' },
 					this.props.career
 				),
 				_react2.default.createElement(
-					"div",
-					{ className: "portfolio-description" },
+					'div',
+					{ className: 'portfolio-description' },
 					this.props.description
 				),
 				_react2.default.createElement(
-					"div",
-					{ className: "portfolio-national" },
+					'div',
+					{ className: 'portfolio-national' },
 					this.props.national
 				),
 				_react2.default.createElement(
-					"div",
-					{ className: "portfolio-address" },
+					'div',
+					{ className: 'portfolio-address' },
 					this.props.address
 				),
 				_react2.default.createElement(
-					"div",
-					{ className: "portfolio-phone" },
+					'div',
+					{ className: 'portfolio-phone' },
 					this.props.phone
 				),
 				_react2.default.createElement(
-					"div",
-					{ className: "portfolio-mail" },
+					'div',
+					{ className: 'portfolio-mail' },
 					this.props.mail
 				),
 				_react2.default.createElement(
-					"div",
-					{ className: "link",
+					'h2',
+					null,
+					'Skills of Portfolio'
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'skills' },
+					_react2.default.createElement(
+						'ul',
+						{ className: 'item' },
+						this.props.idSkill.map(function (idSkill) {
+							return _react2.default.createElement(
+								'li',
+								{ key: idSkill },
+								_this2.props.lookupSkill(idSkill).skill
+							);
+						})
+					),
+					_react2.default.createElement(
+						'h3',
+						null,
+						'Add new skill'
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'add-new-skill' },
+						_react2.default.createElement(
+							'form',
+							{ onSubmit: this.handleSubmit },
+							_react2.default.createElement('input', { type: 'text', ref: 'newSkillInput' }),
+							_react2.default.createElement('input', { type: 'submit' })
+						)
+					)
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'link',
 						onClick: this.props.portfolioListClick },
-					"Back to Home Page"
+					'Back to Home Page'
 				)
 			);
 		}
@@ -23322,7 +23398,7 @@ exports.default = Portfolio;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.fetchPortfolio = exports.fetchPortfolioList = undefined;
+exports.addSkill = exports.fetchSkills = exports.fetchPortfolioList = exports.fetchPortfolio = undefined;
 
 var _axios = __webpack_require__(196);
 
@@ -23330,14 +23406,26 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(idPerson) {
+	return _axios2.default.get('/api/portfolios/' + idPerson).then(function (resp) {
+		return resp.data;
+	});
+};
+
 var fetchPortfolioList = exports.fetchPortfolioList = function fetchPortfolioList() {
 	return _axios2.default.get('/api/portfolios').then(function (resp) {
 		return resp.data.portfolios;
 	});
 };
 
-var fetchPortfolio = exports.fetchPortfolio = function fetchPortfolio(idPerson) {
-	return _axios2.default.get('/api/portfolios/' + idPerson).then(function (resp) {
+var fetchSkills = exports.fetchSkills = function fetchSkills(idSkills) {
+	return _axios2.default.get('/api/skills/' + idSkills.join(',')).then(function (resp) {
+		return resp.data.skills;
+	});
+};
+
+var addSkill = exports.addSkill = function addSkill(newSkill, idPerson) {
+	return _axios2.default.post('/api/insert_skills', { newSkill: newSkill, idPerson: idPerson }).then(function (resp) {
 		return resp.data;
 	});
 };

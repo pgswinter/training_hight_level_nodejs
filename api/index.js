@@ -2,7 +2,7 @@ import express from 'express';
 import {MongoClient, ObjectID } from 'mongodb';
 import assert from 'assert';
 import config from '../server/config';
-// import data from '../src/loadingData'
+import bodyParse from 'body-parser';
 
 let mdb;
 MongoClient.connect(config.mongodbUri, (err,db)=>{
@@ -11,6 +11,7 @@ MongoClient.connect(config.mongodbUri, (err,db)=>{
 })
 
 const router = express.Router();
+router.use(bodyParse.json());
 
 router.get('/portfolios', (req,res) => {
 
@@ -27,57 +28,68 @@ router.get('/portfolios', (req,res) => {
 				res.send({portfolios});
 				return;
 			}
-
-			portfolios[portfolio.id] = portfolio // Change to use Object ID
+			portfolios[portfolio._id] = portfolio // Change to use Object ID
 			
 		})
 	// **** Loading data from MONGO DB
 });
 
-// router.get('/skills/:idSkills', (req,res) => {
-
-// 	const idSkills = req.params.idSkills.split(',').map(Number);
-
-// 	// **** Loading data from MONGO DB
-// 	let skills = {};
-// 	mdb.collection('skillTable').find({idSkill:{$in:idSkills}})
-// 		.each((err,skill)=>{
-// 			assert.equal(null, err);
-
-// 			if(!skill){ // no more contests
-// 				res.send({skills});
-// 				return;
-// 			}
-
-// 			skills[skill.idSkill] = skill 
-// 		})
-// 	// **** Loading data from MONGO DB
-// });
-
 router.get('/portfolios/:idPerson',(req,res)=>{
 
-		mdb.collection('personalityTable')
-		.findOne({id:Number(req.params.idPerson)})
-		.then(portfolio => res.send(portfolio))
+	mdb.collection('personalityTable')
+	// .findOne({id:Number(req.params.idPerson)})
+	.findOne({_id:ObjectID(req.params.idPerson)})
+	.then(portfolio => res.send(portfolio))
+	.catch(error => {
+		console.log(error);
+		res.status(404).send('Bad Request');
+	});
+
+})
+
+router.get('/skills/:idSkills', (req,res) => {
+
+	// const idSkills = req.params.idSkills.split(',').map(Number);
+	const idSkills = req.params.idSkills.split(',').map(ObjectID);
+
+	// **** Loading data from MONGO DB
+	let skills = {};
+	mdb.collection('skillTable').find({_id:{$in:idSkills}})
+		.each((err,skill)=>{
+			assert.equal(null, err);
+
+			if(!skill){ // no more contests
+				res.send({skills});
+				return;
+			}
+
+			skills[skill._id] = skill 
+		})
+	// **** Loading data from MONGO DB
+});
+
+router.post('/insert_skills',(req,res)=>{
+	// insert data
+	const idPerson = ObjectID(req.body.idPerson);
+	const skill = req.body.newSkill;
+	// validate ...
+	mdb.collection('skillTable').insertOne({skill}).then(result =>
+		mdb.collection('personalityTable').findAndModify(
+				{_id: idPerson},
+				[],
+				{$push: {idSkill: result.insertedId}},
+				{new: true}
+			).then(doc =>
+				res.send({
+					updatePorfolio: doc.value,
+					newSkill: {_id: result.insertedId, skill}
+				})
+			)
+		)
 		.catch(error => {
 			console.log(error);
 			res.status(404).send('Bad Request');
 		});
-
 })
-
-// router.get('/portfolio/:idPerson', (req,res) => {
-
-// 	// **** Loading data from MONGO DB
-// 	mdb.collection('personalityTable')
-// 		// .findOne({id:Number(req.params.contestId)})
-// 		.findOne({ '_id': ObjectID(req.params.idPerson)}) // Change to use Object ID
-// 		.then(portfolio => res.send(portfolio))
-// 		.catch(error => {
-// 			console.log(error);
-// 			res.status(404).send('Bad Request');
-// 		});
-// 	// **** Loading data from MONGO DB
-// });
 
 export default router;
