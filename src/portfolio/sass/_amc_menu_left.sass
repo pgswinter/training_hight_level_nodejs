@@ -1,0 +1,212 @@
+@import map-get
+@import common
+@import responsive
++exports("amc_menu_left")
+    .no-float
+        float: none
+
+    .set-bg-white
+        background-color: rgba(255, 255, 255, 1) !important
+
+    .set-bg-white1
+        background-color: rgba(255, 255, 255, 0.8) !important
+
+    .set-bg-dark
+        background-color: map-get($amaris-color-dark, 3)
+
+    .set-bg-dark1
+        background-color: map-get($amaris-color-dark, 3)
+
+    .set-bg-oran
+        background-color: map-get($amaris-color-hot, 2)
+
+    .set-bg-oran1
+        background-color: map-get($amaris-color-hot, 1)
+
+    button[class^="-btn"],
+    button[class*="-btn"],
+    button[class^="btn-"],
+    button[class*="btn-"]
+        background-color: #cdcdcd
+        border: none
+        box-shadow: none
+        
+        display: block
+
+    .menu-move
+        left: 0 !important
+
+    body
+        .menu-left
+            position: fixed
+            left: -200%
+            height: 100%
+            top: 0
+            width: 320px
+            z-index: 4
+            &:before
+                display: block
+                content: ""
+                width: 25.5em
+                height: 100%
+                position: absolute
+                top: 0
+                left: -5em
+                background-color: rgba(69, 69, 71, 0.9)
+                transform: skew(-10deg, 0)
+                -webkit-transform: skew(-10deg, 0)
+                -moz-transform: skew(-10deg, 0)
+            @extend .transition-effect-1
+            .menu-btn
+                position: fixed
+                left: 0
+                z-index: 1
+                background-color: transparent
+                color: map-get($amaris-color-hot, 2)
+                font-size: 20pt
+                width: 20%
+                height: 78px
+                margin-left: 10px
+                padding-left: 10px
+                padding-right: 10px
+                @extend .transition-effect
+                .fa
+                    &.fa-bars
+                        opacity: 1
+                    &.fa-close
+                        opacity: 0
+                i,
+                label,
+                span
+                    float: left
+                    cursor: pointer
+
+                span
+                    line-height: 1
+                    padding-bottom: 5px
+                    left: 40px
+                    display: block
+                    color: map-get($amaris-color-hot, 2)
+                    opacity: 0
+                    @extend .transition-effect
+                i
+                    padding: 0 12px
+
+                    &:hover
+                        margin-top: 0
+
+                label,
+                span
+                    margin-left: 0
+                    opacity: 0
+                    text-transform: capitalize
+
+                    &.welc-symb
+                        opacity: 1
+                > *
+                    @extend .set-cent-vert
+                &:hover
+                    span
+                        opacity: 1
+                        left: 60px
+            .the-menu
+                height: 100%
+                margin-top: 55px
+                margin-left: 30px
+                position: absolute
+                @extend .transition-effect-1
+                &.lv-01
+                    > li
+                        &.tomato
+                            a
+                                &:hover
+                                    color: #e85122
+
+                        &.lotus
+                            a
+                                &:hover
+                                    color: #ff96f8
+
+                > li
+                    color: #fff
+                    margin-top: 15px
+                    margin-bottom: 15px
+                    
+
+                    &.active
+                        a
+                            color: #ef8b1b
+                            text-decoration: none
+
+                    a
+                        color: #fff
+                        font-size: 16pt
+                        
+                        font-weight: 100
+                        text-decoration: none
+                        &:hover
+                            color: #ef8b1b
+                            text-decoration: none
+
+                    &.md-high
+                        margin-top: 55px
+                        .language-wrap
+                            nav
+                                font-size: 26px
+
+                                a
+                                    span
+                                        @extend .transition-effect-1
+
+                                        &:hover,
+                                        &.active
+                                            color: map-get($amaris-color-hot, 1)
+
+                    &.ex-high
+                        margin-top: 80px
+
+                    .lang-wrap
+                        cursor: pointer
+
+                        .bar
+                            padding: 0
+                            background-color: transparent
+                            float: left
+                            width: 150px
+
+                            .item-wrapper
+                                white-space: nowrap
+                                font-size: 16pt
+                                font-weight: 100
+                                font-style: italic
+
+                        .expa-btn
+                            padding: 0
+                            background-color: transparent
+                            margin-top: 8px
+
+                        .list-item
+                            margin-top: 5px
+
+                            li
+                                padding-left: 0
+                                padding-right: 0
+                                padding-top: 5px
+                                padding-bottom: 5px
+                                background-color: transparent
+                                border-bottom: 1px solid rgba(255, 255, 255, 0.18)
+                                font-weight: normal
+
+                                .item-wrapper
+                                    color: #fff
+                                    font-style: italic
+            &.active
+                left: 0
+                .menu-btn
+                    .fa
+                        &.fa-bars
+                            opacity: 0
+                        &.fa-close
+                            opacity: 1
+                .the-menu
+                    left: 0

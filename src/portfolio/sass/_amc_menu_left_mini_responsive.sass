@@ -1,0 +1,122 @@
+@import map-get
+@import responsive_for_all
++exports("_amc_menu_left_mini_responsive")
+	// Large Screen
+	@media #{$amc-max-2560}
+	@media #{$amc-max-2560-landscape}
+		body
+			.menu-left
+				&:before
+					width: 25em
+					left: -8em
+				.menu-btn
+					i
+				.the-menu
+					direction: rtl
+					&.lv-01
+						left: 0
+						margin-left: 0
+						padding-left: 2.5em
+						text-align: left
+	@media #{$amc-max-2560-portrait}
+	
+	@media #{$amc-max-1920}
+		body
+			.menu-left
+				&:before
+					left: -7em
+				.menu-btn
+					i
+				.the-menu
+					direction: rtl
+					&.lv-01
+						left: 0
+						margin-left: 0
+						text-align: left
+	@media #{$amc-max-1920-landscape}
+	@media #{$amc-max-1920-portrait}
+	
+	@media #{$amc-max-1600}
+	@media #{$amc-max-1600-landscape}
+	@media #{$amc-max-1600-portrait}
+		body
+			.menu-left
+				&:before
+					left: -16em
+				.menu-btn
+					i
+				.the-menu
+					direction: rtl
+					&.lv-01
+						left: 0
+						margin-left: 0
+						padding-left: 2.5em
+						text-align: left
+	// Medium Screen
+	@media #{$amc-max-1366}
+	@media #{$amc-max-1366-landscape}
+	@media #{$amc-max-1366-portrait}
+
+	@media #{$amc-min-1024}
+	@media #{$amc-max-1024}
+	@media #{$amc-max-1024-landscape}
+	@media #{$amc-max-1024-portrait}
+	// Small Screen
+	@media #{$amc-max-768}
+		body
+			.menu-left
+				right: -200%
+				left: initial
+				&:before
+					transform: skew(0, 0)
+					-webkit-transform: skew(0, 0)
+					-moz-transform: skew(0, 0)
+					left: initial !important
+					right: 0
+					background-color: rgba(69,69,71,0.98)
+				.menu-btn
+					right: 0
+					left: initial
+					i
+						padding: 0 0
+						right: 30px
+						float: none
+					span
+						right: 60px
+						left: initial !important
+						width: 250px !important
+						text-align: right
+						opacity: 0
+					&:hover
+						span
+							opacity: 1
+				.the-menu
+					margin-left: initial
+					right: 30px
+					height: 80vh
+					li
+						text-align: right
+				&.active
+					right: 0
+					left: initial
+					.menu-btn
+						span
+							right: 80px
+	@media #{$amc-max-768-landscape}
+	@media #{$amc-max-768-portrait}
+		
+	@media #{$amc-max-568}
+	@media #{$amc-max-568-landscape}
+	@media #{$amc-max-568-portrait}
+	// extra small Screen
+	@media #{$amc-max-320}
+	@media #{$amc-max-320-landscape}
+	@media #{$amc-max-320-portrait}
+
+
+
+
+
+
+
+					

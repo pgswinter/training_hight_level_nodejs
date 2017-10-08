@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PortfolioList from './PortfolioList';
 import Portfolio from './Portfolio';
+import MenuLeft from './MenuLeft';
 import * as api from '../../../client/api'
 
 const pushState = (obj, url) => {
@@ -118,8 +119,11 @@ class App extends Component{
 
 	render(){
 		return(
-			<div className="App">
-				{this.currentContent()}
+			<div className="body_content">
+				<MenuLeft />
+				<div className="App">
+					{this.currentContent()}
+				</div>
 			</div>
 		)
 	}

@@ -12,9 +12,14 @@ module.exports={
 		// 'modules':'./src/components/gallery/client/client.js',
 		// 'modules':'./src/components/gallery/client/cart_client.js',
 		// 'maxta_ui_kit':'./src/components/gallery/js/maxta_ui_kit/maxta.js'
+		'style':'./src/portfolio/style/style.js',
 		'modules':'./client/client.js'
 	},
 	plugins:[
+		new ExtractTextPlugin({
+			filename: "[name].[contenthash].min.css",
+			publicPath: publicPath
+		}),
 		// new webpack.optimize.CommonsChunkPlugin({ // Prevent Duplication + keep latest verison when CHUNK HASH
 	 //    	name: ["vendor", "manifest"], // vendor libs + extracted manifest
   // 			minChunks: Infinity,
@@ -67,6 +72,21 @@ module.exports={
 				test: /\.css$/,
 				use: ['style-loader', 'css-loader']
 			},
+	  		{
+		  		test: /\.sass$/,
+	            use: ExtractTextPlugin.extract({
+	                use: [{
+	                    loader: "css-loader",
+	                    options: {
+	                    	minimize: true || {}
+	                    }
+	                }, {
+	                    loader: "sass-loader"
+	                }],
+	                // use style-loader in development
+	                fallback: "style-loader"
+	            })
+	        },
 			{
 				test: /\.(jpg|png|gif)$/,
 				use: 'file-loader'

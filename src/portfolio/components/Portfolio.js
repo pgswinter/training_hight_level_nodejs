@@ -12,6 +12,9 @@ class Portfolio extends Component{
 	render(){
 		return(
 			<div className="portfolio">
+				<div className="menu-left">
+
+				</div>
 				<div className="portfolio-name">
 					{this.props.name}
 				</div>
