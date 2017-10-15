@@ -13,6 +13,7 @@ module.exports={
 		// 'modules':'./src/components/gallery/client/cart_client.js',
 		// 'maxta_ui_kit':'./src/components/gallery/js/maxta_ui_kit/maxta.js'
 		'style':'./src/portfolio/style/style.js',
+		'test':'./src/portfolio/components/TodoInput.js',
 		'modules':'./client/client.js'
 	},
 	plugins:[

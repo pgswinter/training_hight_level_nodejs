@@ -120,7 +120,6 @@ class App extends Component{
 	render(){
 		return(
 			<div className="body_content">
-				<MenuLeft />
 				<div className="App">
 					{this.currentContent()}
 				</div>
